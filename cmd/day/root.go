@@ -13,6 +13,7 @@ var inputs embed.FS
 
 var DayFunc = map[int]func() error{
 	1: dayOne,
+	2: dayTwo,
 }
 
 func parseLinesInt(lines []byte) []int {
@@ -27,6 +28,20 @@ func parseLinesInt(lines []byte) []int {
 			if err == nil {
 				res = append(res, intT)
 			}
+		}
+	}
+	return res
+}
+
+func parseLinesStr(lines []byte) []string {
+	var res []string
+
+	lineReader := bufio.NewScanner(bytes.NewReader(lines))
+
+	for lineReader.Scan() {
+		t := lineReader.Text()
+		if len(t) > 0 {
+			res = append(res, t)
 		}
 	}
 	return res
