@@ -38,31 +38,20 @@ func dayOne() error {
 
 func dayOnePart2(input []int) (int, error) {
 	// windows is a map of start index window + the sum
-	var windows = map[int]int{}
 	countWindowsIncreased := 0
-	windowsCounted := 0
-	for idx := range input {
-		// check for sum of windows, and tabulate them
-		for _, windowIdx := range []int{idx - 2, idx - 1} {
-			if windowIdx >= 0 {
-				curSum, ok := windows[windowIdx]
-				if !ok {
-					return 0, fmt.Errorf("something went wrong, we should always have a running sum for windowIdx %d at idx %d", windowIdx, idx)
-				}
-				windows[windowIdx] = curSum + input[idx]
-			}
-		}
-		// start new window sum for current index
-		windows[idx] = input[idx]
-		// try to check if the most recently completed window (i-2) had a depth increase
-		if idx-3 >= 0 {
-			windowsCounted++
-			// fmt.Printf("IDX %d: checking windows[%d] > windows[%d]: %d > %d\n", idx, idx-2, idx-3, windows[idx-2], windows[idx-3])
-			windowDepthIncreased := windows[idx-2] > windows[idx-3]
-			if windowDepthIncreased {
+	// these will hold our rolling window values
+	one, two, three := 0, 0, 0
+	for _, cur := range input {
+		// have we set all positions in rolling window (hopefully none of the input values are 0)
+		if one != 0 && two != 0 && three != 0 {
+			// check if depth increased
+			if two+three+cur > one+two+three {
 				countWindowsIncreased++
 			}
 		}
+		// move our window
+		one, two, three = two, three, cur
+
 	}
 	return countWindowsIncreased, nil
 }
