@@ -14,6 +14,7 @@ var inputs embed.FS
 var DayFunc = map[int]func() error{
 	1: dayOne,
 	2: dayTwo,
+	3: day3,
 }
 
 func parseLinesInt(lines []byte) []int {
